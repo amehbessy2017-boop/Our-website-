@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anime Nerds Guild</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+ --bg:#0d0d0f;
+ --card:#1a1a1d;
+ --text:#fff;
+}
+
+body{
+ margin:0;
+ font-family:Poppins,sans-serif;
+ color:var(--text);
+ background: radial-gradient(circle at top, #1a0f2e, #0d0d0f 60%);
+ overflow-x:hidden;
+}
+
+/* 🌌 Aura background */
+body::before{
+ content:"";
+ position:fixed;
+ inset:0;
+ background:
+ radial-gradient(circle at 20% 20%, rgba(140,0,255,0.18), transparent 40%),
+ radial-gradient(circle at 80% 60%, rgba(0,255,200,0.12), transparent 45%);
+ animation:aura 10s infinite alternate;
+ pointer-events:none;
+}
+
+@keyframes aura{
+ 0%{transform:scale(1); filter:hue-rotate(0deg);}
+ 100%{transform:scale(1.2); filter:hue-rotate(40deg);}
+}
+
+header{
+ padding:70px 20px;
+ text-align:center;
+ position:relative;
+ z-index:2;
+}
+
+.controls{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ gap:10px;
+ margin:15px;
+}
+
+button,select{
+ padding:8px 12px;
+ border:none;
+ border-radius:6px;
+ font-weight:600;
+ cursor:pointer;
+}
+
+/* 🔮 Portal buttons */
+.whatsapp-btn,
+.footer-wa a{
+ display:inline-block;
+ padding:14px 28px;
+ font-weight:900;
+ color:#fff;
+ text-decoration:none;
+ border-radius:14px;
+ position:relative;
+ overflow:hidden;
+ background: linear-gradient(135deg,#25D366,#00ffb3);
+ box-shadow:0 0 20px rgba(0,255,150,0.25);
+ transition:.3s;
+}
+
+.whatsapp-btn::before,
+.footer-wa a::before{
+ content:"";
+ position:absolute;
+ top:-50%;
+ left:-50%;
+ width:200%;
+ height:200%;
+ background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 60%);
+ transform:rotate(25deg);
+ animation:shine 3s infinite linear;
+}
+
+@keyframes shine{
+ 0%{transform:translateX(-100%) rotate(25deg);}
+ 100%{transform:translateX(100%) rotate(25deg);}
+}
+
+.whatsapp-btn:hover,
+.footer-wa a:hover{
+ transform:scale(1.08);
+ box-shadow:0 0 30px rgba(0,255,180,0.5);
+}
+
+/* GRID */
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+ gap:20px;
+ padding:20px;
+ max-width:1100px;
+ margin:auto;
+ position:relative;
+ z-index:2;
+}
+
+/* ⚡ cards */
+.card{
+ background:rgba(20,20,30,0.8);
+ backdrop-filter: blur(10px);
+ border:1px solid rgba(255,255,255,0.08);
+ border-radius:10px;
+ padding:10px;
+ text-align:center;
+ transition:.3s;
+ box-shadow:0 0 15px rgba(120,0,255,0.15);
+}
+
+.card:hover{
+ transform:translateY(-6px) scale(1.02);
+ box-shadow:0 0 25px rgba(0,255,200,0.25),
+             0 0 40px rgba(120,0,255,0.2);
+}
+
+.card img{
+ width:100%;
+ border-radius:8px;
+}
+
+/* 👑 admins */
+.admin{
+ background:rgba(25,25,40,0.9);
+ padding:10px 18px;
+ border-radius:8px;
+ font-weight:800;
+ border:1px solid rgba(255,215,0,0.25);
+ box-shadow:0 0 10px rgba(255,215,0,0.15);
+ transition:.3s;
+}
+
+.admin:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 18px rgba(255,215,0,0.35);
+}
+
+/* modal */
+.modal{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.7);
+ display:none;
+ align-items:center;
+ justify-content:center;
+}
+
+.modal-content{
+ background:rgba(20,20,30,0.95);
+ padding:20px;
+ border-radius:10px;
+ max-width:600px;
+}
+
+.footer-wa{
+ text-align:center;
+ padding:40px 20px;
+ position:relative;
+ z-index:2;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>⚔ Anime Nerds Guild</h1>
+
+<div class="controls">
+<input id="searchBox" placeholder="Search anime...">
+
+<select id="sortSelect">
+<option value="">Sort</option>
+<option value="az">A-Z</option>
+<option value="score">Score</option>
+<option value="eps">Episodes</option>
+</select>
+
+<button onclick="toggleTheme()">🌗 Realm Shift</button>
+<button onclick="toggleMusic()">🎵 Music</button>
+</div>
+
+<a href="https://chat.whatsapp.com/FPbOR2KSeOX6zXrc8MpJCp" target="_blank" class="whatsapp-btn">
+Enter Guild Portal 🔥
+</a>
+</header>
+
+<section>
+<h2 style="text-align:center">🏆 Top Guild Picks</h2>
+<div id="topRated" class="grid"></div>
+</section>
+
+<section>
+<h2 style="text-align:center">Anime Realm</h2>
+<div id="animeGrid" class="grid"></div>
+</section>
+
+<section>
+<h2 style="text-align:center">👑 Hall of Fame</h2>
+<div id="admins" class="grid"></div>
+</section>
+
+<div class="modal" id="modal">
+<div class="modal-content" id="modalContent"></div>
+</div>
+
+<div class="footer-wa">
+<a href="https://chat.whatsapp.com/FPbOR2KSeOX6zXrc8MpJCp" target="_blank">
+Join Guild Portal 🔥
+</a>
+</div>
+
+<script>
+const grid=document.getElementById("animeGrid");
+const topRated=document.getElementById("topRated");
+const adminsContainer=document.getElementById("admins");
+
+let animeData=[];
+
+/* 👑 admins */
+const admins=["Eren Yeager","CONTROLLA","X-PHANTOM"];
+admins.forEach(a=>{
+ const div=document.createElement("div");
+ div.className="admin";
+ div.innerHTML=`👑 ${a}`;
+ adminsContainer.appendChild(div);
+});
+
+/* cards */
+function createCard(a){
+ const card=document.createElement("div");
+ card.className="card";
+
+ card.innerHTML=`
+ <img src="${a.images.jpg.image_url}" onclick="openModal(${a.mal_id})">
+ <h3>${a.title}</h3>
+ <p>⭐ ${a.score||"N/A"} | 🎬 ${a.episodes||"?"}</p>
+ `;
+
+ return card;
+}
+
+function render(data){
+ grid.innerHTML="";
+ data.forEach(a=>grid.appendChild(createCard(a)));
+ topRated.innerHTML="";
+ data.slice(0,4).forEach(a=>topRated.appendChild(createCard(a)));
+}
+
+/* modal */
+function openModal(id){
+ const a=animeData.find(x=>x.mal_id===id);
+ document.getElementById("modal").style.display="flex";
+ document.getElementById("modalContent").innerHTML=`
+ <h2>${a.title}</h2>
+ <p>${a.synopsis||"No data"}</p>
+ <button onclick="modal.style.display='none'">Close</button>
+ `;
+}
+
+/* controls */
+function toggleTheme(){
+ document.body.classList.toggle("light");
+}
+
+function toggleMusic(){
+ const m=new Audio("https://files.catbox.moe/8z4l6u.mp3");
+ m.play();
+}
+
+/* fetch */
+async function fetchAnime(){
+ const res=await fetch("https://api.jikan.moe/v4/seasons/now");
+ const data=await res.json();
+ animeData=data.data.slice(0,12);
+ render(animeData);
+}
+
+fetchAnime();
+</script>
+
+</body>
+</html>
